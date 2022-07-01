@@ -1,0 +1,115 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ product.title }} | {% endblock %}
+
+{% block content %}
+<div id="productapp">
+    <div class="row">
+        <div class="col-lg-12">
+        <div class="box-element">
+        
+                {% if product.image %}
+                    <figure class="image is-4by3 mb-6">
+                        <img :src="mainImage.image" style="width: 100%;">
+                    </figure>
+                {% endif %}
+        
+                {% if product.images.all %}
+                    <hr>
+        
+                    <div class="row product_subdiv">
+                        <div class="col-xs-4"  v-for="image in images" v-bind:key="image.id" style="padding: 20px;">
+                            <img :src="image.thumbnail" @click="changeMainImage(image)" style="height: 100%;margin-left: 10px; margin-right: 10px;">
+                        </div>
+                    </div>
+                {% endif %}
+        
+                <h1 class="title">Product Name: {{ product.title }}</h1>
+                <h2>Price: ${{ product.price }}</h2>
+        
+                <p class="mb-6"><span class="tag is-dark">Seller: {{ product.vendor.name }}</span></p>
+        
+                <p>Description: {{ product.description }}</p>
+        
+                <hr>
+        
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="notification is-success is-toast">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+                {% if request.user.is_authenticated %}
+                {% if request.user.buyer %}
+                <form method="post" action=".">
+                    {% csrf_token %}
+        
+                    <div class="form-field">
+                            <label for="quantity">Quantity</label>
+                            <input id="quantity" type="number" name="quantity" value="1" class="form-control" min="1">
+                        
+        
+                            <button class="btn btn-primary" style="margin-top: 10px;">Add to cart</button>
+                        
+                    </div>
+                </form>
+                {% endif %}
+                {% else %}
+                <form method="post" action=".">
+                    {% csrf_token %}
+        
+                    <div class="form-field">
+                            <label for="quantity">Quantity</label>
+                            <input id="quantity" type="number" name="quantity" value="1" class="form-control" min="1">
+                        
+        
+                            <button class="btn btn-primary" style="margin-top: 10px;">Add to cart</button>
+                        
+                    </div>
+                </form>
+                {% endif %}
+                {% if similar_products %}
+                    <hr>
+        
+                    <div class="columns is-multiline">
+                        <div class="column is-12">
+                            <h2 class="subtitle">Similar products</h2>
+                        </div>
+                        
+                        <div class="row">
+                        {% for product in similar_products %}
+                            {% include 'product/parts/list_item.html' %}
+                                {% endfor %}
+                            </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ imagesstring|json_script:"json-imagesstring" }}
+<script src="https://unpkg.com/vue@next"></script>
+<script>
+    const ProductApp = {
+        data() {
+            return {
+                mainImage: '',
+                images: []
+            }
+        },
+        mounted() {
+            this.images = JSON.parse(JSON.parse(document.getElementById("json-imagesstring").textContent))
+            this.mainImage = this.images[0]
+        },
+        methods: {
+            changeMainImage(image) {
+                this.mainImage = image
+            }
+        }
+    }
+
+    Vue.createApp(ProductApp).mount('#productapp')
+</script>
+{% endblock %}
