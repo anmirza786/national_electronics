@@ -14,6 +14,7 @@ class Contact(models.Model):
 class PopularClients(models.Model):
     client_name = models.CharField(max_length=255,null=False,blank=False)
     image = models.ImageField(upload_to = 'clients')
+    ratting = models.PositiveIntegerField(blank=False,null=False,verbose_name='Client`s Ratting')
 
 class Feedback(models.Model):
     name=models.CharField(max_length=40)

@@ -1,12 +1,12 @@
-<a href="{% url 'product' product.category.slug product.slug %}">
+
   <div class="col-lg-4 templatemo-item-col all att soon">
-    <div class="meeting-item">
+    <div href="{% url 'product' product.category.slug product.slug %}" class="meeting-item">
       <div class="thumb">
         <div class="price">
           <span>Rs.{{ product.price }}</span>
         </div>
         <a href="meeting-details.html"
-          ><img src="{{ product.image.url }}" alt=""
+          ><img id="product-image" src="{{ product.image.url }}" alt=""
         /></a>
       </div>
       <div class="down-content">
@@ -14,4 +14,4 @@
       </div>
     </div>
   </div>
-</a>
+

@@ -842,12 +842,20 @@ services
   border-radius: 20px;
   text-align: center;
   color: #fff;
-  padding: 40px;
+  padding-bottom: 40px;
 }
 
 .services .item .icon {
   max-width: 100%;
-  margin: 0 auto;
+  max-height: 120px;
+  /* margin: 0 auto; */
+}
+.services .item .icon img {
+  object-fit: cover;
+  max-width: 100%;
+  max-height: 120px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
 }
 
 .services .item h4 {
@@ -1550,10 +1558,14 @@ section.meetings-page {
 
 section.meetings-page .filters {
   text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 60px;
 }
 
-section.meetings-page .filters li {
+section.meetings-page .filters a {
   font-size: 13px;
   color: #a12c2f;
   background-color: #fff;
@@ -1564,11 +1576,11 @@ section.meetings-page .filters li {
   text-transform: uppercase;
   transition: all 0.3s;
   cursor: pointer;
-  margin: 0px 3px;
+  margin: 5px 5px;
 }
 
-section.meetings-page .filters ul li.active,
-section.meetings-page .filters ul li:hover {
+section.meetings-page .filters a.active,
+section.meetings-page .filters a:hover {
   background-color: #a12c2f;
   color: #fff;
 }
@@ -1607,13 +1619,21 @@ section.meetings-page .main-button-red a {
   text-align: center;
   margin-top: 30px;
 }
-
+section.meetings-page .main-button-red a {
+  padding: 12px 60px;
+  text-align: center;
+  margin-top: 30px;
+}
 section.meetings-page .pagination ul li.active a,
 section.meetings-page .pagination ul li a:hover {
   background-color: #a12c2f;
   color: #fff;
 }
-
+section.meetings-page .pagination ul li .disabled {
+  pointer-events: none;
+  background-color: #7a7a7a;
+  cursor: not-allowed;
+}
 .meeting-single-item .thumb {
   position: relative;
 }

@@ -5,16 +5,63 @@ from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from .forms import AddToCartForm
-from .models import Category, Product
+from .models import Category, Product, ProductStatusEnum
 
 from apps.cart.cart import Cart
 def veiwProducts(request):
     product = Product.objects.all()
     # print(product)
-    paginator = Paginator(product,25)
+    paginator = Paginator(product,20)
     page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return render(request,'product/view_products.html',{'page_obj':page_obj,'product':paginator})
+    try:
+        page_obj = paginator.get_page(page_number)
+        pages = paginator.page(page_number)
+    except:
+        page_obj = paginator.get_page(1)
+        pages = paginator.page(1)
+    return render(request,'product/view_products.html',{'page_obj':page_obj,'product':paginator,'pages':pages})
+
+
+def veiwProductsSoon(request):
+    product = Product.objects.filter(product_status = ProductStatusEnum.SOON)
+    # print(product)
+    paginator = Paginator(product,20)
+    page_number = request.GET.get('page')
+    try:
+        page_obj = paginator.get_page(page_number)
+        pages = paginator.page(page_number)
+    except:
+        page_obj = paginator.get_page(1)
+        pages = paginator.page(1)
+    return render(request,'product/view_products_soon.html',{'page_obj':page_obj,'product':paginator,'pages':pages})
+
+
+def veiwProductsAvailable(request):
+    product = Product.objects.filter(product_status = ProductStatusEnum.AVAILABLE)
+    # print(product)
+    paginator = Paginator(product,20)
+    page_number = request.GET.get('page')
+    try:
+        page_obj = paginator.get_page(page_number)
+        pages = paginator.page(page_number)
+    except:
+        page_obj = paginator.get_page(1)
+        pages = paginator.page(1)
+    return render(request,'product/view_products_available.html',{'page_obj':page_obj,'product':paginator,'pages':pages})
+
+
+def veiwProductsStock(request):
+    product = Product.objects.filter(product_status = ProductStatusEnum.OUTOFSTOCK)
+    # print(product)
+    paginator = Paginator(product,20)
+    page_number = request.GET.get('page')
+    try:
+        page_obj = paginator.get_page(page_number)
+        pages = paginator.page(page_number)
+    except:
+        page_obj = paginator.get_page(1)
+        pages = paginator.page(1)
+    return render(request,'product/view_products_stock.html',{'page_obj':page_obj,'product':paginator,'pages':pages})
 
 def search(request):
     query = request.GET.get('query', '')
