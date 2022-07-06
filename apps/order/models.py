@@ -8,7 +8,7 @@ User = get_user_model()
 
 class OrderStatusEnum(models.IntegerChoices):
     VARIFICATIONPENDING = 1, 'Varification Pending'
-    VARIFIED = 2, 'DARIFIED'
+    VARIFIED = 2, 'Varified'
     DELIVERED = 3, 'Delivered'
 
 

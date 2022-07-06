@@ -3,11 +3,18 @@ import random
 from django.contrib import messages
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
-
+from django.core.paginator import Paginator
 from .forms import AddToCartForm
 from .models import Category, Product
 
 from apps.cart.cart import Cart
+def veiwProducts(request):
+    product = Product.objects.all()
+    # print(product)
+    paginator = Paginator(product,25)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request,'product/view_products.html',{'page_obj':page_obj,'product':paginator})
 
 def search(request):
     query = request.GET.get('query', '')
@@ -19,13 +26,9 @@ def product(request, category_slug, product_slug):
     cart = Cart(request)
 
     product = get_object_or_404(Product, category__slug=category_slug, slug=product_slug)
-
-    imagesstring = '{"thumbnail": "%s", "image": "%s", "id": "mainimage"},' % (product.get_thumbnail(), product.image.url)
-
-    for image in product.images.all():
-        imagesstring += ('{"thumbnail": "%s", "image": "%s", "id": "%s"},' % (image.get_thumbnail(), image.image.url, image.id))
-    
-    print(imagesstring)
+    paginator = Paginator(product,25)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     if request.method == 'POST':
         form = AddToCartForm(request.POST)
@@ -50,7 +53,8 @@ def product(request, category_slug, product_slug):
         'form': form,
         'product': product,
         'similar_products': similar_products,
-        'imagesstring': "[" + imagesstring.rstrip(',') + "]"
+        # 'imagesstring': "[" + imagesstring.rstrip(',') + "]"
+        'page_obj': page_obj,
     }
 
     return render(request, 'product/product.html', context)

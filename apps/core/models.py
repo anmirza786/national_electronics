@@ -1,4 +1,6 @@
+from distutils.command.upload import upload
 import email
+from http import client
 from django.db import models
 
 # Create your models here.
@@ -8,6 +10,10 @@ class Contact(models.Model):
     message = models.TextField(null=False,blank=False)
     def __str__(self):
         return self.email
+
+class PopularClients(models.Model):
+    client_name = models.CharField(max_length=255,null=False,blank=False)
+    image = models.ImageField(upload_to = 'clients')
 
 class Feedback(models.Model):
     name=models.CharField(max_length=40)

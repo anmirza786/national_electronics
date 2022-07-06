@@ -1,0 +1,11 @@
+Account
+phone
+address
+city
+Complete name
+email (Optional)
+username
+password
+
+Password forget
+

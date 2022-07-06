@@ -1,4 +1,5 @@
 from email import message
+import random
 from django.shortcuts import redirect, render
 from apps.cart.cart import Cart
 from apps.core.forms import ContactForm, FeedbackForm
@@ -8,9 +9,16 @@ from apps.product.models import Product
 
 
 def frontpage(request):
-    newest_products = Product.objects.all()[0:8]
+    newest_products = Product.objects.all()[0:4]
     # cart = Cart(request)
-    return render(request, 'core/frontpage.html', {'newest_products': newest_products})
+    random_products = list(Product.objects.all())
+    # print(random_products.__len__())
+    if random_products.__len__()>=10:
+        random_products = random.sample(random_products,10)
+    else:
+        random_products = random.sample(random_products,random_products.__len__())
+    
+    return render(request, 'core/frontpage.html', {'newest_products': newest_products,'random_products':random_products})
 
 
 def contact(request):
