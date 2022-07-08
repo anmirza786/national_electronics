@@ -15,7 +15,14 @@
           <ul class="nav">
             <li class="scroll-to-section"><a href="{% url 'frontpage' %}" class="active">Home</a></li>
             <li><a href="{% url 'products' %}">Products</a></li>
+            {% if request.user.is_authenticated %}
+            <li>
+              <a href="{% url 'logout' %}" class="btn btn-secondary"
+                style="padding: 0px 20px;margin: 0; color:white">Log out</a>
             </li>
+            {% else %}
+            <li><a href="{% url 'login' %}" class="navbar-item">Login</a></li>
+            {% endif %}
             <li class="scroll-to-section"><a href="#contact">Contact Us</a></li>
           </ul>
           <a class='menu-trigger'>
