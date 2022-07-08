@@ -5,7 +5,7 @@ from apps.cart.cart import Cart
 from apps.core.forms import ContactForm, FeedbackForm
 from apps.core.models import Contact, Feedback
 
-from apps.product.models import Product
+from apps.product.models import Category, Product
 
 
 def frontpage(request):
@@ -17,8 +17,8 @@ def frontpage(request):
         random_products = random.sample(random_products,10)
     else:
         random_products = random.sample(random_products,random_products.__len__())
-    
-    return render(request, 'core/frontpage.html', {'newest_products': newest_products,'random_products':random_products})
+    categories = Category.objects.all()
+    return render(request, 'core/frontpage.html', {'newest_products': newest_products,'random_products':random_products,'categories':categories})
 
 
 def contact(request):

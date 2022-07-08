@@ -73,9 +73,10 @@ def product(request, category_slug, product_slug):
     cart = Cart(request)
 
     product = get_object_or_404(Product, category__slug=category_slug, slug=product_slug)
-    paginator = Paginator(product,25)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    imagesstring = '{"thumbnail": "%s", "image": "%s", "id": "mainimage"},' % (product.get_thumbnail(), product.image.url)
+
+    for image in product.images.all():
+        imagesstring += ('{"thumbnail": "%s", "image": "%s", "id": "%s"},' % (image.get_thumbnail(), image.image.url, image.id))
 
     if request.method == 'POST':
         form = AddToCartForm(request.POST)
@@ -100,13 +101,21 @@ def product(request, category_slug, product_slug):
         'form': form,
         'product': product,
         'similar_products': similar_products,
-        # 'imagesstring': "[" + imagesstring.rstrip(',') + "]"
-        'page_obj': page_obj,
+        'imagesstring': "[" + imagesstring.rstrip(',') + "]"
+        
     }
 
     return render(request, 'product/product.html', context)
 
 def category(request, category_slug):
     category = get_object_or_404(Category, slug=category_slug)
-
-    return render(request, 'product/category.html', {'category': category})
+    products = Product.objects.filter(category=category)
+    paginator = Paginator(products,20)
+    page_number = request.GET.get('page')
+    try:
+        page_obj = paginator.get_page(page_number)
+        pages = paginator.page(page_number)
+    except:
+        page_obj = paginator.get_page(1)
+        pages = paginator.page(1)
+    return render(request, 'product/category.html', {'page_obj':page_obj,'category':category,'pages':pages})
